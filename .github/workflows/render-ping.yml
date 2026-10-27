@@ -1,0 +1,23 @@
+name: Render Scheduler
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render application
+        env:
+          TARGET_URL: ${{ vars.TARGET_URL }}
+        run: |
+          if [ -z "$TARGET_URL" ]; then
+            echo "Missing TARGET_URL repository variable"
+            exit 1
+          fi
+
+          curl --fail --silent --show-error \
+            --max-time 30 \
+            "$TARGET_URL"
